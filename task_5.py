@@ -24,9 +24,9 @@ for i in range(0, len(tf_idf)):
         query_vector[i] = query_filtered.count(tf_idf.iloc[i]['term']) / len(query_filtered) * idf.iloc[i][0]
 
 tf_idf.drop('term', axis=1)
-tf_idf_matrix = np.array(list(map(lambda x: x[2:], tf_idf.values))).T
+tf_idf_matrix = np.array(list(map(lambda x: x[2:], tf_idf.values)), dtype = 'float').T
 
-cos_sim = dot(tf_idf_matrix, query_vector)/(norm(tf_idf_matrix)*norm(query_vector))
+cos_sim = dot(tf_idf_matrix, query_vector)/(norm(tf_idf_matrix, axis=1)*norm(query_vector))
 with open('index.txt', 'r', encoding='utf-8') as index:
     index = list(map(lambda x: x.split(' ')[1], index.read().split('\n')))
 res = sorted(list(zip(cos_sim, index)), key=itemgetter(0), reverse=True)
